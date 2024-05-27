@@ -1,4 +1,4 @@
-f54bdec2b82d914ac5d3d964ca89c413 *DESCRIPTION
+144e57266923477e2b6e5b37de5f2a76 *DESCRIPTION
 335c8fd7008dbfe1d6a6ede5b3c2b0ac *LICENSE
 c43eedb47481a4a78c7b77b30dca3cbd *NAMESPACE
 8566326f2391d0f11d2ad1149340ba65 *R/PRNG.R
@@ -13,4 +13,4 @@ a4df4493ee506e60a0fc757887aac9ae *man/rbits.Rd
 0a8543e5a104ac86b7421330bcd84665 *man/saw_tooth.Rd
 9d5df0b46522b8e4148f2dda3e26ac9f *man/time.Rd
 6ed24c478de964bf49e7165940877726 *tests/testthat.R
-6b873b317b496ae63ce28bf07f9516bc *tests/testthat/test-all.R
+5dbc5055d7a8aa9447763250613c68d5 *tests/testthat/test-all.R

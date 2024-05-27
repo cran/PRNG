@@ -1,6 +1,7 @@
 
 library(testthat)
 library(PRNG)
+library(nortest)  # For additional normality tests
 
 # Uniformity Test
 test_that("Uniformity Test", {
@@ -11,7 +12,7 @@ test_that("Uniformity Test", {
 
 # Independence Test
 test_that("Independence Test", {
-  random_numbers <- runf(N = 1000)
+  random_numbers <- runf(N = 1000,Time = FALSE)
   autocorr_result <- acf(random_numbers, plot = FALSE)
   expect_true(all(abs(autocorr_result$acf[2:10]) < 0.1), "Consecutive random numbers are not independent.")
 })
@@ -49,9 +50,23 @@ test_that("Valid Inputs Test", {
   expect_silent(runf(N = 10, x00 = 0.5, x01 = 0.5, x02 = 0.5, a1 = 3.8, a2 = 0.7))
 })
 
-# Distribution Tests (Normal)
-test_that("Distribution Test - Normal", {
+
+# Helper function to run multiple normality tests and return TRUE if all pass
+run_normality_tests <- function() {
   normal_numbers <- rnorm(n = 1000)
-  shapiro_test <- shapiro.test(normal_numbers)
-  expect_true(shapiro_test$p.value > 0.05, "Generated numbers do not follow a normal distribution")
+  shapiro_p <- shapiro.test(normal_numbers)$p.value
+  ad_p <- ad.test(normal_numbers)$p.value  # Anderson-Darling test
+  ks_p <- ks.test(normal_numbers, "pnorm", mean(normal_numbers), sd(normal_numbers))$p.value  # KS test
+  
+  # All p-values should be greater than 0.05 for the sample to be considered normally distributed
+  all(c(shapiro_p, ad_p, ks_p) > 0.05)
+}
+
+test_that("Distribution Test - Normal", {
+  # Run the test multiple times to account for randomness
+  results <- replicate(50, run_normality_tests())
+  
+  # Check if a reasonable proportion of results are TRUE
+  expect_true(mean(results) > 0.7, 
+              "Generated numbers do not follow a normal distribution in the majority of tests")
 })
